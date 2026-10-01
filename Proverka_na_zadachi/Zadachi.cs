@@ -8,7 +8,7 @@ namespace Proverka_na_zadachi
 {
     internal class Zadachi
     {
-        public Zadachi(string title, string description, string deadline, bool isComplete)
+        public Zadachi(string title, string description, string deadline, bool IsCompleted)
         {
             Title = title;
             Description = description;
@@ -45,15 +45,15 @@ namespace Proverka_na_zadachi
         public static Zadachi FromFileRow(string row)
         {
             string[] parts = row.Split(';');
-            if (parts.Length == 5)
+            if (parts.Length != 4)
             {
-                string title = parts[0];
-                string description = parts[1];
-                string deadline = parts[2];
-                bool IsComplete  = bool.Parse(parts[3]);
-                return new Zadachi(title, description, deadline, IsComplete);
+                return null;
             }
-            return null;
+            string title = parts[0];
+            string description = parts[1];
+            string deadline = parts[2];
+            bool IsComplete = bool.Parse(parts[3]);
+            return new Zadachi(title, description, deadline, IsCompleted);
         }
     }
 }

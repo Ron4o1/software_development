@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Proverka_na_zadachi
 {
@@ -32,22 +34,47 @@ namespace Proverka_na_zadachi
                 switch (choice)
                 {
                     case "1":
-                        AddTask(zadachi);
+                        Console.Write("Въведете Заглавие: ");
+                        string productID = Console.ReadLine();
+
+                        Console.Write("Въведете име: ");
+                        string title = Console.ReadLine();
+
+                        Console.Write("Въведете описание: ");
+                        string description = Console.ReadLine();
+
+                        Console.Write("Въведете крайна дата: ");
+                        string deadline = Console.ReadLine();
+
+                        Console.Write("Задачата готова ли е: ");
+                        bool IsComplated = bool.Parse(Console.ReadLine());
+
+                        Zadachi newZadachi = new Zadachi(title, description, deadline, IsComplated);
+                        zadachi.Add(newZadachi);
+
+                        SaveProductsToFile(zadachi);
+                        Console.WriteLine("Успешно добавен нов запис!");
+                        Console.WriteLine();
                         break;
+
                     case "2":
                         ShowTasks(zadachi);
                         WaitForKey(zadachi);
                         break;
+
                     case "3":
                         MarkTaskCompleted(zadachi);
                         break;
+
                     case "4":
                         DeleteTask(zadachi);
                         break;
+
                     case "5":
                         running = false; 
                         Console.WriteLine("Довиждане!");
                         break;
+
                     default:
                         Console.WriteLine("Невалиден избор. Натиснете бутон за продължение...");
                         WaitForKey(zadachi);
@@ -55,7 +82,17 @@ namespace Proverka_na_zadachi
                 }
             }
         }
-        
+        static void SaveProductsToFile(List<Zadachi> products)
+        {
+            List<string> rows = new List<string>();
+            foreach (Zadachi z in products)
+            {
+                rows.Add(z.ToFileRow());
+            }
+            File.WriteAllLines(FilePath, rows);
+        }
+
+
         static List<Zadachi> LoadZadachi(string FilePath)
         {
             List<Zadachi> zadachi = new List<Zadachi>();
@@ -75,7 +112,7 @@ namespace Proverka_na_zadachi
             }
             return zadachi;
         }
-        static void AddTask(List<Zadachi> zadachi)
+        static void AddTask(List<Zadachi> zadachi, bool isCompleted)
         {
             Console.Clear();
             Console.WriteLine("--- ДОБАВЯНЕ НА НОВА ЗАДАЧА ---");
@@ -89,9 +126,16 @@ namespace Proverka_na_zadachi
             Console.Write("Въведете краен срок: "); 
             string deadline = Console.ReadLine();
 
-            zadachi.Add(new Zadachi(title, description, deadline));
+            zadachi.Add(new Zadachi(title, description, deadline, IsCompleted);
             Console.WriteLine("\nЗадачата беше добавена успешно!");
             WaitForKey(zadachi);
+            Zadachi z = new Zadachi(title, description, deadline, IsCompleted);
+
+            zadachi.Add(z);
+
+            SaveProductsToFile(zadachi);
+
+            Console.WriteLine("Продуктът е добавен успешно!");
         }
 
         static void ShowTasks(List<Zadachi> zadachi)
