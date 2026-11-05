@@ -5,32 +5,24 @@ namespace TodoManager
 {
     internal class Program
     {
-        static TodoService service = new TodoService();
+        //static TodoService service = new TodoService();
         static void Main(string[] args)
         {
+            TodoStorage storage = new TodoStorage();
+            TodoService service = new TodoService(storage);
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine();
-                Console.WriteLine("======= TODO MANAGER ========");
-                Console.WriteLine("1. Добави задача");
-                Console.WriteLine("2. Покажи задачи");
-                Console.WriteLine("3. Маркирай задача като изпълнена");
-                Console.WriteLine("4. Изтрий задача");
-                Console.WriteLine("x. Изход");
-
-                Console.WriteLine();
-                Console.Write("Избор: ");
+                Menu();
                 string choice = Console.ReadLine();
                 try
                 {
                     switch (choice)
                     {
-                        case "1": { AddTodo(); break; }
-                        case "2": { ListAllTodos(); break; }
-                        case "3": { CompleteTodo(); break; }
-                        case "4": { DeleteTodo(); break; }
-                        case "x": { Console.WriteLine("Край на програмата"); Console.ReadLine(); return; }
+                        case "1": { AddTodo(service); break; }
+                        case "2": { ListAllTodos(service); break; }
+                        case "3": { CompleteTodo(service); break; }
+                        case "4": { DeleteTodo(service); break; }
+                        case "5": { Console.WriteLine("Край на програмата"); Console.ReadLine(); return; }
                         default: { Console.WriteLine("Невалиден избор."); break; }
                     }
                 }
@@ -51,12 +43,27 @@ namespace TodoManager
             }
         }
 
-        private static void DeleteTodo()
+        static void Menu()
+        {
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine("======= TODO MANAGER ========");
+            Console.WriteLine("1. Добави задача");
+            Console.WriteLine("2. Покажи задачи");
+            Console.WriteLine("3. Маркирай задача като изпълнена");
+            Console.WriteLine("4. Изтрий задача");
+            Console.WriteLine("5. Изход");
+
+            Console.WriteLine();
+            Console.Write("Избор: ");
+        }
+
+        private static void DeleteTodo(TodoService service)
         {
             Console.Clear();
             Console.WriteLine();
             Console.WriteLine("=====  Изтрий задача =======\n");
-            ListAllTodos();
+            ListAllTodos(service);
 
             Console.Write("Избери Id: ");
             int id;
@@ -70,12 +77,12 @@ namespace TodoManager
 
         }
 
-        private static void CompleteTodo()
+        private static void CompleteTodo(TodoService service)
         {
             Console.Clear();
             Console.WriteLine();
             Console.WriteLine("=====  Маркирай задача като завършена =======\n");
-            ListAllTodos();
+            ListAllTodos(service);
 
             Console.Write("Избери Id: ");
             int id;
@@ -89,7 +96,7 @@ namespace TodoManager
             Console.WriteLine("Задачата е завършена.");
         }
 
-        private static void ListAllTodos()
+        private static void ListAllTodos(TodoService service)
         {
             Console.Clear();
             Console.WriteLine();
@@ -110,7 +117,7 @@ namespace TodoManager
             }
         }
 
-        private static void AddTodo()
+        private static void AddTodo(TodoService service)
         {
             Console.Clear();
             Console.WriteLine();

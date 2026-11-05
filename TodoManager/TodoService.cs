@@ -9,16 +9,21 @@ namespace TodoManager
 {
     internal class TodoService
     {
-        private readonly static List<TodoItem> todos = new List<TodoItem>();
-        private static int nextId = 1;
+        //private readonly static List<TodoItem> todos = new List<TodoItem>();
+        //private static int nextId = 1;
 
-        public List<TodoItem> GetAll()
+        private readonly TodoStorage storage;
+        public TodoService(TodoStorage str)
         {
-            return todos;
+            this.storage = str;
+        }
+        public IReadOnlyList<TodoItem> GetAll()
+        {
+            return storage.Todos;
         }
         public TodoItem FindById(int id)
         {
-            foreach (TodoItem todoItem in todos)
+            foreach (TodoItem todoItem in storage.Todos)
             {
                 if(todoItem.Id == id)
                 {
@@ -32,9 +37,9 @@ namespace TodoManager
 
         public void Add(string title, string description, DateTime dueDate)
         {
-            TodoItem todoItem = new TodoItem(nextId, title, description, dueDate);
-            todos.Add(todoItem);
-            nextId++;
+            TodoItem todoItem = new TodoItem(storage.NextId, title, description, dueDate);
+            storage.Todos.Add(todoItem);
+            storage.NextId++;
         }
 
         public void Complate(int id)
@@ -53,7 +58,7 @@ namespace TodoManager
             if (deleteTask != null)
                 throw new ArgumentException("Няма задача с токава ID.");
 
-            todos.Remove(deleteTask);
+            storage.Todos.Remove(deleteTask);
         }
     }
 }
