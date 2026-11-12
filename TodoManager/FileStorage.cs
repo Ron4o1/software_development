@@ -24,16 +24,13 @@ namespace TodoManager
             }
 
             string json = File.ReadAllText(path);
-
             TodoStorage todoStorage = JsonSerializer.Deserialize<TodoStorage>(json);
-
             return todoStorage;
         }
 
         public void Save(TodoStorage todoStorage)
         {
             string json = JsonSerializer.Serialize(todoStorage);
-
             File.WriteAllText(path, json);
         }
     }

@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace TodoManager
 {
@@ -13,9 +14,11 @@ namespace TodoManager
         //private static int nextId = 1;
 
         private readonly TodoStorage storage;
-        public TodoService(TodoStorage str)
+        private readonly FileStorage fileStorage;
+        public TodoService(FileStorage file)
         {
-            this.storage = str;
+            fileStorage = file;
+            this.storage = fileStorage.Load();
         }
         public IReadOnlyList<TodoItem> GetAll()
         {
@@ -40,25 +43,31 @@ namespace TodoManager
             TodoItem todoItem = new TodoItem(storage.NextId, title, description, dueDate);
             storage.Todos.Add(todoItem);
             storage.NextId++;
+
+            fileStorage.Save(storage);
         }
 
         public void Complate(int id)
         {
             TodoItem complatedTask = FindById(id);
 
-            if (complatedTask != null)
+            if (complatedTask == null)
                 throw new ArgumentException("Няма задача с токава ID.");
 
             complatedTask.Completed();
+
+            fileStorage.Save(storage);
         }
         public void Delete(int id)
         {
             TodoItem deleteTask = FindById(id);
 
-            if (deleteTask != null)
+            if (deleteTask == null)
                 throw new ArgumentException("Няма задача с токава ID.");
 
             storage.Todos.Remove(deleteTask);
+
+            fileStorage.Save(storage);
         }
     }
 }

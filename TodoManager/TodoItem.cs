@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace TodoManager
 {
@@ -15,6 +16,7 @@ namespace TodoManager
         private int nextId;
         private DataSetDateTime dueDate1;
 
+        [JsonInclude]
         public int Id { get; private set; }
         public string Title
         {
@@ -45,6 +47,7 @@ namespace TodoManager
                 dueDate = value;
             }
         }
+        [JsonInclude]
         public bool IsCompleted
         {
             get
@@ -57,6 +60,7 @@ namespace TodoManager
             }
         }
 
+        public TodoItem() { }
         public TodoItem(int id, string title, string description, DateTime dueDate)
         {
             if (id <= 0)

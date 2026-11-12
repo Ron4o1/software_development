@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace TodoManager
 {
@@ -8,8 +9,8 @@ namespace TodoManager
         //static TodoService service = new TodoService();
         static void Main(string[] args)
         {
-            TodoStorage storage = new TodoStorage();
-            TodoService service = new TodoService(storage);
+            FileStorage fileStorage = new FileStorage("todos json");
+            TodoService service = new TodoService(fileStorage);
             while (true)
             {
                 Menu();
